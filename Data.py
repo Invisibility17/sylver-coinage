@@ -1,16 +1,3 @@
-class Data():
-    def __init__( self, plays ):
-        self.plays = plays
-
-    def stringForFile(self):
-        return """{0}\n{1}\n""".format( self.plays, self.whoWon() )
-
-    def whoWon(self):
-        if len(self.plays)%2 == 1:
-            return "Player 1 lost."
-        else:
-            return "Player 1 won."
-
 def greater( x, y, num=0):
     if x[num] > y[num]:
         return True

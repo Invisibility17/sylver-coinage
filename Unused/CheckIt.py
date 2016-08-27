@@ -1,7 +1,7 @@
 from NumericalSemigroupClass import NumericalSemigroup
 from ExhaustiveGamesClass import ExhaustiveGame
 from ReceiveGensFunctions import receiveGens
-from Data import sortIt, Data
+from Data import sortIt #we use sortIt
 import pickle
 import os.path
 
@@ -72,6 +72,8 @@ def play():
     global good
     global bad
     global trios
+    twoPlays = receiveGens( True, [] )
+    assert len(twoPlays) == 2, "Starting with more than two plays; could cause errors"
     P1gens = NumericalSemigroup( receiveGens(True, [] ) ).minGens
 
     thirdly = ExhaustiveGame( NumericalSemigroup(P1gens )).thirds
@@ -106,7 +108,7 @@ def play():
 good = load("good")
 bad = load("bad")
 trios = load("trios")
-#print(good, bad, trios)
+
 while True:
     play()
         

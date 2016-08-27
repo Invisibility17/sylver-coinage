@@ -2,16 +2,18 @@ FMAX = 800
 class NumericalSemigroup():
 
     def __init__(self, generators):
-        self.gens = generators
-        self.S = self.generateDict()
+        self.gens = self.getMinGenerators( generators )
+        self.S = self.generateSemigroupDict()
         self.FS = self.Frobenius()
         self.inS = self.getInS()
         self.notInS = self.getNotS()
-        self.minGenerators()
 
-    def generateDict( self ):
+    
+    def generateSemigroupDict( self ):
+        """ Generates a dictionary which contains true if a number
+            is in the numerical semigroup and false if not. """
         S={}
-        
+
         for n in range(FMAX):
             S[n] = False
         for n in self.gens:
@@ -31,34 +33,24 @@ class NumericalSemigroup():
 
         return S
 
-    def modifyDict( self ):
-        
-        M = self.S.copy()
-        for m in M:
-            if self.S[m] == True:
-                for n in range(len(self.gens)):
-                    self.S[m + self.gens[n]] = True
+    def whatIfAddGens( self, newGens ):
+        return NumericalSemigroup( self.gens + newGens  )
 
-        ep = self.endPoint( self.S)
-        for n in self.S:
-            if n > ep:
-                self.S[n] == True
 
-        self.FS = self.Frobenius()
 
-    def moreGens( self, generators ):
-        for n in generators:
-            self.gens.append( n )
-        self.modifyDict()
-        self.minGenerators()
+    def getGens( self ):
+        return self.gens
 
+    
     def Frobenius( self ):
+        """ returns the Frobenius number """
         try:
             return max( self.getNotS())
         except:
             return 0
 
     def ended( self, S ):
+        """ Tests whether we've reached F(S) """
         test = 0
         listS = []
         for n in S:
@@ -99,6 +91,7 @@ class NumericalSemigroup():
                 test = 0
 
     def getInS( self ):
+        """ Returns everything in S """
         ep = self.endPoint( self.S)
         self.inS = []
         for n in self.S:
@@ -109,6 +102,7 @@ class NumericalSemigroup():
         return self.inS
 
     def getNotS( self ):
+        """ Everything not in S """
         ep = self.endPoint( self.S)
         self.notS = []
         for n in self.S:
@@ -124,6 +118,7 @@ class NumericalSemigroup():
         print( "Not in S:\n", self.getNotS() )
 
     def isIrreducible( self ):
+        """ checks whether the semigroup is irreducible """
         if self.FS%2 == 0:
             if len(self.getNotS()) == self.FS/2:
                 return True
@@ -131,7 +126,9 @@ class NumericalSemigroup():
             if len(self.getNotS()) == (self.FS+1)/2:
                 return True
         return False
+    
     def getApery( self ):
+        """ returns apery set """
         apery = []
         mods = []
         if len(self.inS) > 1:
@@ -151,14 +148,8 @@ class NumericalSemigroup():
     def printApery( self ):
         print( "The Apery set is: {}".format( self.getApery() ))
 
-    def whoWon( self ):
-        if len(self.gens)%2 == 1:
-            return "Player 1 loses."
-        else:
-            return "Player 1 wins."
-
-    def minGenerators( self ):
-        tempGens = self.gens.copy()
+    def getMinGenerators( self, tempGens ):
+        
         tempGens.sort()
         minGens = []
         for n in range(len(tempGens)-1, 0, -1):
@@ -166,12 +157,13 @@ class NumericalSemigroup():
                 minGens.append( tempGens[n] )
         minGens.append( tempGens[0] )
         minGens.sort()
-        self.minGens = minGens.copy()
+        return minGens
         
     def printMinGens( self):
         print( "Minimum generators:", self.minGens )
         
     def canLinearCombo(self, maxy, nums ):
+        """ Tests whether maxy is a linear combo of the numbers. Recursive! """
         if maxy >= 0:
             for n in nums:
                 if maxy%n == 0:
@@ -182,34 +174,3 @@ class NumericalSemigroup():
             return False
         else:
             return False
-
-    def goodChoice( self, k=2 ):
-        self.getApery()
-        choices = []
-        plays = []
-        for n in self.apery:
-            plays.append( n-k*min(self.gens))
-            if n - k*min(self.gens) < 0:
-                choices.append( "Impossible")
-            else:
-                if n - k*min(self.gens) < 4:
-                    if self.isIrreducible() == True:
-                        if self.FS%2 == 1:
-                            choices.append("Bad symmetric")
-                        else:
-                            choices.append("Bad pseudo")
-                    else:
-                        choices.append( "Bad, neither.")
-                else:
-                    lookgens = self.gens.copy()
-                    lookgens.append( n - k*min(self.gens))
-                    lookahead = NumericalSemigroup( lookgens )
-                    if lookahead.isIrreducible( ) == True:
-                        if self.FS%2 == 1:
-                            choices.append( "Symmetric" )
-                        else:
-                            choices.append( "Pseudo")
-                    else:
-                        choices.append( "Neither")
-                    
-        return plays, choices
