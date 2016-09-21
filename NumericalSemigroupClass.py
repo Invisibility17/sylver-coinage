@@ -174,3 +174,48 @@ class NumericalSemigroup():
             return False
         else:
             return False
+    
+    
+    def associatedDigraph( self ):
+        """
+        pairs = []
+        for el in self.getNotS()[3:]:
+            pairs.append( (el, el))
+            if 2*el not in self.getInS():
+                pairs.append( (el, 2*el ))
+            for gen in self.gens:
+                if gen+el not in self.getInS():
+                    pairs.append( (el, gen+el ))
+
+        return pairs
+                
+        """
+        hashLookup = {}
+        #pairs = []
+        temp = self.getInS()
+        notIn = self.getNotS()
+        FS = max(notIn)
+        for old in notIn[3:]:
+            hashLookup[old] = [old]
+            SG = self.whatIfAddGens( [old] )
+            newIn = SG.getInS()
+            FSn = max(newIn)
+            for val in range(FSn+1, FS+1, 1) : newIn.append( val )
+            for new in newIn[1:]:
+                if (new in notIn) and (old != new ): #((old,new) not in pairs) and (old != new ):
+                    #pairs.append( (old, new) )
+                    hashLookup[old] = hashLookup[old] + [new]
+        print( hashLookup )
+        """          
+        print( pairs )
+        processPairs = []
+        for pair in pairs:
+            if pair[1]-pair[0] in self.gens:
+                processPairs.append( pair )
+            elif pair[1]%pair[0] == 0:
+                processPairs.append( pair )
+        """  
+        
+        #return processPairs
+            
+            

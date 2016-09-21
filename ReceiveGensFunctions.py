@@ -44,6 +44,4 @@ def isGCD( nums ):
 def isGCD1( nums ):
     return isGCD(nums)==1
 
-#k = receiveGens( True, [] )
 
-#print( k )

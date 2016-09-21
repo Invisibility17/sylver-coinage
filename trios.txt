@@ -8,3 +8,4 @@ If the smallest two numbers are not relatively prime, the multipicities will be 
 5 6 19  0.0 multiplicities from F(S)
 5 7 8  3.0 multiplicities from F(S)
 5 9 31  0.0 multiplicities from F(S)
+9 11 13  7.333333333333333 multiplicities from F(S)
