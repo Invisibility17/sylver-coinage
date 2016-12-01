@@ -13,14 +13,15 @@ def main():
         play(good, bad, trios)
 
 def play(good, bad, trios):
-    firstTwo = receiveGens( True, [] )
-    assert len(firstTwo) == 2, "Starting with more than two plays: bad juju"
-    game = GameState( firstTwo[0], firstTwo[1] )
-    
+    gens = receiveGens( True, [] )
+    assert len(gens) == 2, "Starting with more than two plays: bad juju"
+    game = GameState( gens )
+
     nPlays = game.getValidNextPlays()
-    
+   
     for play in nPlays:
         print( play, end = " ")
+        
         k = checkIt( game.copy(), play, good, bad )
         if k==1:
             print( "We have found the good one!!!!", game.getPlays()+[play] )
@@ -41,6 +42,7 @@ def play(good, bad, trios):
     savetext( trios, "trios")
 
 def checkIt( game, nextPlay, good, bad ):
+    
     game.makePlay( nextPlay)
     nPlay = game.getValidNextPlays()
     counter = 0
@@ -73,7 +75,7 @@ def checkIt( game, nextPlay, good, bad ):
             good.append( baseGens )
             return 1
 
-    
+        
 def savetext( data, name ):
     with open(name+".txt", "w") as filey:
         filey.write("If the smallest two numbers are not relatively prime, the multipicities will be wrong!\n")
@@ -97,4 +99,5 @@ def load( name ):
     else:
         return []
     
-main()
+if __name__ == '__main__':
+    main()

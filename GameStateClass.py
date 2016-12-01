@@ -1,12 +1,12 @@
 from NumericalSemigroupClass import NumericalSemigroup
 from ReceiveGensFunctions import isGCD
-
+from copy import deepcopy
 class GameState():
 
-    def __init__( self, play1, play2 ):
-        assert 1==isGCD( [play1, play2] ), "Initial 2 plays are not relatively prime"
-        self.gameBoard = NumericalSemigroup( [play1, play2] )
-        self.plays = [play1, play2]
+    def __init__( self, plays ):
+        assert 1==isGCD( plays ), "Initial 2 plays are not relatively prime"
+        self.gameBoard = NumericalSemigroup( plays )
+        self.plays = plays
 
     def makePlay( self, play ):
         assert play not in self.gameBoard.getInS(), "Invalid move; play already eliminated"
@@ -28,9 +28,7 @@ class GameState():
         return thirds
 
     def copy( self ):
-        copy = GameState( self.plays[0], self.plays[1] )
-        for n in self.plays[2:]:
-            copy.makePlay( n )
-        return copy
+        return GameState( deepcopy(self.plays) )
         
-    
+        
+
