@@ -2,6 +2,7 @@
 
 import pickle
 import os.path
+from sys import exit
 def main():
     good = load('good')
     bad = load('bad')
